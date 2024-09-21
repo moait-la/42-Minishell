@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 22:27:14 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/10 01:47:05 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/20 21:53:03 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	init_the_struct(t_minishell *minishell)
 	minishell->allpip = 0;
 	minishell->redirection = 0;
 	minishell->exit_error = 0;
+	minishell->interrupt_herdoc = 0;
 	minishell->is_specific_case = false;
 	minishell->redirections = NULL;
 	minishell->cmd = NULL;

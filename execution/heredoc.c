@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 06:31:29 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/19 19:23:12 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/21 15:18:40 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	check_if_quoted(char *eof)
 }
 
 static void	heredoc(t_cmd *cmd, t_env *env_lst, t_minishell *t_mini,
-		t_open_fds **open_fds)
+					t_open_fds **open_fds)
 {
 	int		fds[2];
 	char	*line;
@@ -49,10 +49,11 @@ static void	heredoc(t_cmd *cmd, t_env *env_lst, t_minishell *t_mini,
 	}
 	dup2_and_close(t_mini->cpy_dup, fds[1]);
 	free_multi(line, NULL, NULL);
+	t_mini->interrupt_herdoc = get_exitst(0, false);
 }
 
-void	ft_open_heredoc(t_minishell *t_mini, t_env *env_lst, \
-							t_open_fds **open_fds)
+void	ft_open_heredoc(t_minishell *t_mini, t_env *env_lst,
+					t_open_fds **open_fds)
 {
 	int		j;
 	int		i;
@@ -62,15 +63,19 @@ void	ft_open_heredoc(t_minishell *t_mini, t_env *env_lst, \
 	while (t_mini->cmd)
 	{
 		i = -1;
-		j = 0;
-		while (t_mini->cmd->allcmd[++i])
+		j = -1;
+		while (t_mini->cmd->allcmd[++i] && t_mini->interrupt_herdoc != -99)
 		{
 			if (!ft_strcmp(t_mini->cmd->allcmd[i], "<<"))
 			{
-				t_mini->eof = t_mini->cmd->redirection[j];
+				t_mini->eof = t_mini->cmd->redirection[++j];
 				heredoc(t_mini->cmd, env_lst, t_mini, open_fds);
-				j++;
 			}
+		}
+		if (t_mini->interrupt_herdoc == -99)
+		{
+			get_exitst(1, true);
+			break ;
 		}
 		t_mini->cmd = t_mini->cmd->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishel.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:25:23 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/20 19:36:28 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/20 21:52:40 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_minishell
 	int		env_passed;
 	int		first_child_pid;
 	int		last_child_pid;
+	int		interrupt_herdoc;
 	bool	is_specific_case;
 	int		cpy_dup;
 	t_cmd	*cmd;

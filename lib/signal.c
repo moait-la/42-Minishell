@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 01:16:34 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/20 19:03:12 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/20 21:56:21 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,5 @@ void	signal_herdoc(int sc)
 {
 	if (sc == SIGINT)
 		close(0);
-	get_exitst(1, true);
+	get_exitst(-99, true);
 }
