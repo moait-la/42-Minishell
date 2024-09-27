@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 23:57:41 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/07 16:01:43 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/24 21:25:11 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,23 @@ bool	special_letter(char l)
 		i++;
 	}
 	return (false);
+}
+
+bool	if_not_containe_exit(t_minishell *m, t_env *e)
+{
+	char	*expand;
+	bool	status;
+
+	expand = expanding(m->cmd->allcmd[0], e, m);
+	status = true;
+	if (!ft_strncmp("exit", expand, 4)
+		&& countword(expand, ' ') == 1)
+	{
+		if (expand[5])
+			status = false;
+	}
+	else
+		status = false;
+	free(expand);
+	return (status);
 }

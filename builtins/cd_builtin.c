@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 23:02:12 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/10 22:08:04 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:14:35 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,14 @@ void	ft_cd(t_cmd *cmd, t_env *env_lst)
 	dest = NULL;
 	current_pwd = getcwd(NULL, 0);
 	if (!current_pwd)
-		return (get_exitst(1, true), perror("getcwd"));
-	if (!cmd->command[1] || !ft_strcmp(cmd->command[1], "~"))
+		current_pwd = ft_curr_pwd_removed(&dest, env_lst, cmd);
+	if (!cmd->command[1] || (!ft_strcmp(cmd->command[1], "~") && !dest))
 		dest = ft_go_home(env_lst);
-	else if (!ft_strcmp(cmd->command[1], "-"))
+	else if (!ft_strcmp(cmd->command[1], "-") && !dest)
 		dest = ft_goto_prev_dir(env_lst);
-	else if (cmd->command[1][0] == '~')
+	else if (cmd->command[1][0] == '~' && !dest)
 		dest = ft_handle_tilde(cmd, env_lst);
-	else
+	else if (!dest)
 		dest = ft_goto_path(cmd);
 	if (!dest)
 		return (free(current_pwd));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   make_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 03:20:18 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/10 23:39:02 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/24 21:24:32 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,7 @@ char	*ft_make_prompt(t_env *env_lst)
 
 	current_path = getcwd(NULL, 0);
 	if (!current_path)
-	{
-		putstr_fd(2, strerror(errno), "\n");
-		return (get_exitst(18, true), NULL);
-	}
+		current_path = ft_strdup("minishell");
 	home_path = ft_getenv("HOME", env_lst);
 	path = ft_make_path(current_path, home_path);
 	prompt = ft_generate_prompt(path);

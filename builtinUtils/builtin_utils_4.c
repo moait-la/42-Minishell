@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils_4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 17:23:48 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/14 17:27:01 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/24 21:24:18 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,25 @@ void	ft_sorted_envlst(t_cmd *cmd, t_env *env_lst, t_env	*smallest)
 		if (smallest->mybool != 2)
 			ft_print_export(cmd, smallest);
 	}
+}
+
+char	*ft_curr_pwd_removed(char **dest, t_env *env_lst, t_cmd *cmd)
+{
+	char	*pwd;
+	char	*tmp;
+
+	pwd = NULL;
+	tmp = NULL;
+	while (env_lst)
+	{
+		if (!ft_strcmp(env_lst->key, "PWD"))
+			pwd = ft_strdup(env_lst->value);
+		if (!ft_strcmp(env_lst->key, "OLDPWD") && cmd->command[1])
+			tmp = ft_strdup(env_lst->value);
+		env_lst = env_lst->next;
+	}
+	*dest = tmp;
+	if (cmd->command[1])
+		perror("getcwd");
+	return (pwd);
 }

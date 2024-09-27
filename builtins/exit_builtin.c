@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:52:27 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/19 00:35:13 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/24 21:23:49 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,38 +58,54 @@ bool	ft_not_digit(char *s, char *s1)
 	return (false);
 }
 
-bool	r_function(int n, int *st, bool ret, int value)
+void	put_value(t_minishell *m, int flag, int value, bool f_exit)
 {
-	if (n == 1)
+	if (flag == 1)
 		printerror("minishel: exit: : numeric argument required \n");
 	else
 		printerror("minishell: exit: too many arguments\n");
-	*st = value;
-	return (ret);
+	if (!f_exit)
+		m->is_exit = false;
+	m->exit_value = value;
 }
 
-bool	ft_exit(t_minishell *m, t_env *e, char **s, int *st)
+bool	handling_exit(t_minishell *m, long n, int is_overflow)
 {
-	char	*str;
-	int		is_overflow;
-	long	n;
-
-	printerror("exit\n");
-	if (!s[1])
+	if (is_overflow == 1)
 	{
-		*st = get_exitst(0, false);
+		printerror("minishel: exit: : numeric argument required \n");
+		m->exit_value = get_exitst(255, true);
 		return (true);
 	}
-	str = expanding(s[1], e, m);
-	if (ft_not_digit(str, s[1]))
-		return (free(str), r_function(1, st, true, get_exitst(255, true)));
-	else if (s[2] != 0)
-		return (free(str), r_function(2, st, false, -1));
-	is_overflow = 0;
-	n = ft_atol(str, &is_overflow);
-	if (is_overflow == 1)
-		return (free(str),
-			r_function(1, st, true, get_exitst(255, true)));
-	*st = (int)(n & 255);
-	return (true);
+	m->exit_value = (int)(n & 255);
+	return (false);
+}
+
+void	ft_exit(t_minishell *m, t_cmd *cmd)
+{
+	long	n;
+
+	if (m->allpip != 0)
+		return ;
+	printerror("exit\n");
+	m->is_exit = true;
+	if (!cmd->allcmd[1])
+	{
+		m->exit_value = get_exitst(0, false);
+		return ;
+	}
+	if (ft_not_digit(cmd->command[1], cmd->allcmd[1]))
+	{
+		put_value(m, 1, get_exitst(255, true), true);
+		return ;
+	}
+	else if (cmd->command[2] != 0)
+	{
+		put_value(m, 2, get_exitst(1, true), false);
+		return ;
+	}
+	m->is_overflow = 0;
+	n = ft_atol(cmd->command[1], &m->is_overflow);
+	if (handling_exit(m, n, m->is_overflow))
+		return ;
 }

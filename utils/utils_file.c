@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 22:27:14 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/20 21:53:03 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/23 23:56:42 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	init_the_struct(t_minishell *minishell)
 	minishell->is_specific_case = false;
 	minishell->redirections = NULL;
 	minishell->cmd = NULL;
+	minishell->is_exit = false;
+	minishell->exit_value = 0;
 }
 
 int	correct_redirection(char *s, char *str, int *i, int j)

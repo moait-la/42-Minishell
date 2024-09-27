@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:27:05 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/10 22:07:45 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/24 21:24:03 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,29 @@ void	ft_env(t_cmd *cmd, t_env *env)
 	}
 }
 
-void	ft_pwd(t_cmd *cmd)
+void	ft_pwd(t_cmd *cmd, t_env *env_lst, char *oldpwd, char *currentpwd)
 {
 	char	*pwd;
+	t_env	*temp;
 
 	pwd = getcwd(NULL, 0);
+	temp = env_lst;
 	if (!pwd)
+	{
+		while (temp)
+		{
+			if (!ft_strcmp(temp->key, "OLDPWD"))
+				oldpwd = ft_strdup(temp->value);
+			if (!ft_strcmp(temp->key, "PWD"))
+				currentpwd = ft_strdup(temp->value);
+			temp = temp->next;
+		}
+		if (chdir(oldpwd) == -1)
+			return (free_multi(oldpwd, currentpwd, 0), ft_cd_perror("cd"));
+		ft_update_env_lst(oldpwd, currentpwd, env_lst);
+		free_multi(oldpwd, currentpwd, NULL);
 		return (get_exitst(1, true), perror("getcwd"));
+	}
 	ft_putstr_fd(pwd, cmd->out);
 	ft_putchar_fd('\n', cmd->out);
 	free(pwd);
@@ -60,7 +76,8 @@ int	ft_is_builtin(char *cmd)
 {
 	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
 		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
-		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env"))
+		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
+		|| !ft_strcmp(cmd, "exit"))
 		return (0);
 	return (1);
 }
@@ -74,11 +91,11 @@ void	ft_execute_builtin(t_minishell *m, t_cmd *cmd, t_env **env_lst)
 	else if (!ft_strcmp(m->cmd->command[0], "env"))
 		ft_env(cmd, *env_lst);
 	else if (!ft_strcmp(m->cmd->command[0], "pwd"))
-		ft_pwd(cmd);
+		ft_pwd(cmd, *env_lst, NULL, NULL);
 	else if (!ft_strcmp(m->cmd->command[0], "unset"))
 		ft_unset(cmd, env_lst);
 	else if (!ft_strcmp(m->cmd->command[0], "export"))
 		ft_export(cmd, *env_lst);
-	if (cmd->out != 1)
-		close(cmd->out);
+	else if (!ft_strcmp(m->cmd->command[0], "exit"))
+		ft_exit(m, cmd);
 }

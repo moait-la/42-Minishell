@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishel.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:25:23 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/20 21:52:40 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/24 21:21:29 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,14 @@ typedef struct s_minishell
 	int		allpip;
 	int		redirection;
 	int		exit_error;
-	int		exit_st;
 	int		env_passed;
 	int		first_child_pid;
 	int		last_child_pid;
 	int		interrupt_herdoc;
 	bool	is_specific_case;
+	bool	is_exit;
+	int		exit_value;
+	int		is_overflow;
 	int		cpy_dup;
 	t_cmd	*cmd;
 }	t_minishell;
@@ -161,6 +163,7 @@ char	*create_str(char *r, char *s, int g);
 void	putstr_fd(int fd, char *str1, char *str2);
 char	*value_exit_status(char *key, bool is_spec);
 char	*expanding_heredoc(char *s, t_env *env, t_minishell *t_mini);
+char	*ft_curr_pwd_removed(char **dest, t_env *env_lst, t_cmd *cmd);
 bool	special_letter(char l);
 char	**ft_expanding_variable_split(char *s, t_expanding *e);
 int		correct_redirection(char *s, char *str, int *i, int j);
@@ -208,7 +211,7 @@ void	ft_echo(t_cmd *cmd);
 void	ft_print_export(t_cmd *cmd, t_env *smallest);
 void	ft_cd(t_cmd *cmd, t_env *env_lst);
 void	ft_env(t_cmd *cmd, t_env *env);
-void	ft_pwd(t_cmd *cmd);
+void	ft_pwd(t_cmd *cmd, t_env *env_lst, char *oldpwd, char *currentpwd);
 void	ft_export(t_cmd *cmd, t_env *env_lst);
 void	ft_unset(t_cmd *cmd, t_env **env_lst);
 int		is_valid_identifier(char *command);
@@ -238,6 +241,5 @@ bool	do_nothing(char *expand, char *s);
 bool	check_ambiguous(char *s, char *expand);
 void	signal_herdoc(int sc);
 int		check_if_quoted(char *eof);
-bool	ft_exit(t_minishell *m, t_env *e, char **s, int *st);
-
+void	ft_exit(t_minishell *m, t_cmd *cmd);
 #endif

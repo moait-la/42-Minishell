@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 17:53:16 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/19 00:39:16 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:40:10 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,12 @@ void	minishell_program(t_minishell *minishell, t_env **env_lst)
 			exit(get_exitst(0, false));
 		}
 		add_history(minishell->read);
-		if (countword(minishell->read, ' ') > 0
-			&& if_out(minishell, *env_lst, prompt))
+		if (countword(minishell->read, ' ') > 0)
 			excuteprogram(minishell, env_lst);
 		free(minishell->read);
 		free(prompt);
+		if (minishell->is_exit)
+			exit(minishell->exit_value);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 16:03:14 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/19 19:27:12 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:26:14 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	ft_init_pipe_fds_for_cmd(t_cmd *cmd, int *pipe_fds, int i)
 {
 	if (cmd->next != NULL)
 	{
+		cmd->out = pipe_fds[i * 2 + 1];
 		if (cmd->next->in == 0)
 			cmd->next->in = pipe_fds[i * 2];
-		cmd->out = pipe_fds[i * 2 + 1];
 	}
 }
 
