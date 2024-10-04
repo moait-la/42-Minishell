@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 01:16:34 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/20 21:56:21 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:27:41 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,5 @@ void	signal_herdoc(int sc)
 {
 	if (sc == SIGINT)
 		close(0);
-	get_exitst(-99, true);
+	get_exitst(-1337, true);
 }

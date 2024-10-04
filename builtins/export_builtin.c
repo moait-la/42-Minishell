@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:54:12 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/14 17:25:30 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:56:56 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	ft_continue_export(t_cmd *cmd, t_env *env_lst)
 	i = 0;
 	while (cmd->command[++i])
 	{
-		if (is_valid_identifier(cmd->command[i]))
+		if (is_valid_identifier(cmd->command[i], 0))
 		{
 			get_exitst(1, true);
 			ft_putstr_fd("not a valid identifier\n", 2);

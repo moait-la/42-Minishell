@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:27:15 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/24 00:16:47 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:36:04 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_child_process(t_cmd *cmd, t_minishell *t_mini, int *fds, \
 		ft_redirect_io_for_cmd(cmd);
 		ft_close_pipe_fds(t_mini->allpip, fds);
 		if (execve(t_mini->path, cmd->command, t_mini->envp) == -1)
-			return (get_exitst(1, true), perror(strerror(errno)), -1);
+			return (perror(strerror(errno)), exit(get_exitst(126, true)), -1);
 	}
 	ft_addto_created_pids(created_pids, pid);
 	if (!cmd->next)
@@ -97,8 +97,9 @@ void	ft_execute(t_minishell	*t_mini, t_env **env_lst)
 	pipe_fds = ft_open_pipes(t_mini, &open_fds);
 	ft_init_start_data(t_mini);
 	ft_open_heredoc(t_mini, *env_lst, &open_fds);
-	if (!t_mini->cmd->command[0] && !t_mini->allpip \
-			&& !t_mini->cmd->redirection[0])
+	if ((!t_mini->cmd->command[0] && !t_mini->allpip \
+			&& !t_mini->cmd->redirection) || \
+				t_mini->interrupt_herdoc == -1337)
 	{
 		ft_close_open_fds(open_fds);
 		return (free(pipe_fds));

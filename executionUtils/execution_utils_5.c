@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 21:07:12 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/14 18:44:22 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:30:25 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,9 @@ void	*ft_exec_file_check(char *cmd)
 			mybool = 0;
 		tmp++;
 	}
-	if (access(cmd, X_OK) != 0 && !mybool)
+	if (access(cmd, F_OK) != 0 && !mybool)
 		return (get_exitst(127, true), perror(strerror(errno)), NULL);
+	if (access(cmd, X_OK) != 0 && !mybool)
+		return (get_exitst(126, true), perror(strerror(errno)), NULL);
 	return ("1337");
 }

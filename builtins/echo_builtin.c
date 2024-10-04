@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:19:43 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/10 17:20:17 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:17:20 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int	ft_check_nl_flag(char **command, int *new_line)
 		j = 0;
 		if (command[i][0] == '-')
 		{
+			if (!command[i][1])
+				return (i);
 			while (command[i][++j])
 			{
 				if (command[i][j] != 'n')

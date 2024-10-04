@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 06:31:29 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/21 15:18:40 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:34:31 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@ static void	heredoc(t_cmd *cmd, t_env *env_lst, t_minishell *t_mini,
 	cmd->in = fds[0];
 	ft_add_to_open_fds(open_fds, cmd->in);
 	t_mini->cpy_dup = dup(0);
+	t_mini->eof = expanding(t_mini->eof, NULL, NULL);
 	while (1)
 	{
 		signal(SIGINT, signal_herdoc);
-		line = readline("> ");
-		if (!line || !ft_strcmp(line, t_mini->eof))
+		line = readline(GREEN"» "COLOR_END);
+		if (!line || !ft_strcmp(line, t_mini->eof) || !t_mini->eof[0])
 			break ;
 		if (!do_expand)
 			line = expanding_heredoc(line, env_lst, t_mini);
@@ -48,7 +49,7 @@ static void	heredoc(t_cmd *cmd, t_env *env_lst, t_minishell *t_mini,
 		free_multi(line, NULL, NULL);
 	}
 	dup2_and_close(t_mini->cpy_dup, fds[1]);
-	free_multi(line, NULL, NULL);
+	free_multi(line, t_mini->eof, NULL);
 	t_mini->interrupt_herdoc = get_exitst(0, false);
 }
 
@@ -64,7 +65,7 @@ void	ft_open_heredoc(t_minishell *t_mini, t_env *env_lst,
 	{
 		i = -1;
 		j = -1;
-		while (t_mini->cmd->allcmd[++i] && t_mini->interrupt_herdoc != -99)
+		while (t_mini->cmd->allcmd[++i] && t_mini->interrupt_herdoc != -1337)
 		{
 			if (!ft_strcmp(t_mini->cmd->allcmd[i], "<<"))
 			{
@@ -72,7 +73,7 @@ void	ft_open_heredoc(t_minishell *t_mini, t_env *env_lst,
 				heredoc(t_mini->cmd, env_lst, t_mini, open_fds);
 			}
 		}
-		if (t_mini->interrupt_herdoc == -99)
+		if (t_mini->interrupt_herdoc == -1337)
 		{
 			get_exitst(1, true);
 			break ;

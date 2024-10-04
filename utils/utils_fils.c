@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 23:57:41 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/24 21:25:11 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:08:46 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,33 @@ bool	if_not_containe_exit(t_minishell *m, t_env *e)
 		status = false;
 	free(expand);
 	return (status);
+}
+
+void	exit_utils(int status, int is_overflow, long n)
+{
+	if (status == 1)
+		return ;
+	get_exitst(255, true);
+	if (status == 3)
+		printf("minishel: exit: numeric argument required \n");
+	else if (status == 5)
+	{
+		get_exitst(1, true);
+		printf("minishell: exit: too many arguments\n");
+	}
+	else if (status == -1337)
+	{
+		if (is_overflow == 1)
+			printf("minishel: exit: numeric argument required \n");
+		else
+			get_exitst(n, true);
+	}
+}
+
+void	exit_utils_(bool is_pip, int *status, int v1, int v2)
+{
+	if (!is_pip)
+		*status = v1;
+	else
+		*status = v2;
 }

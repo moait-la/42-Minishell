@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 15:56:40 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/10 01:46:47 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/27 22:31:52 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char	*expanding(char *s, t_env *env, t_minishell *t_mini)
 	i = 0;
 	while (str[i])
 	{
-		if (checkexpanding(str[i]))
+		if (checkexpanding(str[i]) && t_mini != NULL && env != NULL)
 			result = expanding_type_one(result, str[i], env, t_mini);
 		else
 		{

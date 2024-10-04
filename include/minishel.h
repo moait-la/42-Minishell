@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishel.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:25:23 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/24 21:21:29 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:10:05 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,16 @@
 # define COLOR_PATH	"\033[38;5;51m"
 # define NOT_FOUND "minishell: command not found\n"
 # define DEFAULT_PATH "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."
+
+typedef struct s_exit
+{
+	int		status;
+	int		value;
+	int		is_overflow;
+	bool	is_out;
+	bool	in_pip;
+	long	n;
+}	t_exit;
 
 typedef struct s_env
 {
@@ -214,7 +224,7 @@ void	ft_env(t_cmd *cmd, t_env *env);
 void	ft_pwd(t_cmd *cmd, t_env *env_lst, char *oldpwd, char *currentpwd);
 void	ft_export(t_cmd *cmd, t_env *env_lst);
 void	ft_unset(t_cmd *cmd, t_env **env_lst);
-int		is_valid_identifier(char *command);
+int		is_valid_identifier(char *command, int mybool);
 int		ft_equal_sign(char *cmd);
 int		ft_check_ifexists(char *key, t_env *env_lst);
 int		ft_is_builtin(char *cmd);
@@ -242,4 +252,7 @@ bool	check_ambiguous(char *s, char *expand);
 void	signal_herdoc(int sc);
 int		check_if_quoted(char *eof);
 void	ft_exit(t_minishell *m, t_cmd *cmd);
+char	*joinchar(char *s, char c);
+void	exit_utils(int status, int is_overflow, long n);
+void	exit_utils_(bool is_pip, int *status, int v1, int v2);
 #endif

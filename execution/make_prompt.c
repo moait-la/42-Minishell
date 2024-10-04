@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 03:20:18 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/24 21:24:32 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:13:01 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,27 @@ char	*ft_make_prompt(t_env *env_lst)
 	prompt = ft_generate_prompt(path);
 	free_multi(current_path, path, NULL);
 	return (prompt);
+}
+
+char	*joinchar(char *s, char c)
+{
+	char	*str;
+	int		i;
+
+	if (!s)
+	{
+		str = ft_malloc(1);
+		str[0] = c;
+		return (str);
+	}
+	str = ft_malloc(ft_strlen(s) + 1);
+	i = 0;
+	while (s[i])
+	{
+		str[i] = s[i];
+		i++;
+	}
+	str[i] = c;
+	free(s);
+	return (str);
 }

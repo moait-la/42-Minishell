@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 22:27:14 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/23 23:56:42 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/09/27 22:19:12 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,22 @@ char	*expanding_heredoc(char *s, t_env *env, t_minishell *t_mini)
 	t_use	u;
 
 	str = NULL;
-	i = -1;
-	while (s[++i])
+	i = 0;
+	while (s[i])
 	{
-		if (s[i] == '\"' || s[i] == '\'')
-			str = joinline(str, &s[i]);
-		else
+		if (s[i] != '\"' && s[i] != '\'')
 		{
 			u.start = i;
 			while (s[i] && s[i] != '\"' && s[i] != '\'')
 				i++;
-			u.str = ft_strrange(s, u.start, (u.end = i--));
+			u.str = ft_strrange(s, u.start, i--);
 			s1 = expanding(u.str, env, t_mini);
 			free(u.str);
 			str = create_str(str, s1, 1);
 		}
+		else
+			str = joinchar(str, s[i]);
+		i++;
 	}
 	free(s);
 	return (str);

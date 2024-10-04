@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 17:53:16 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/24 20:40:10 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:43:07 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,14 @@
 void	excuteprogram(t_minishell *minishell, t_env **env_lst)
 {
 	char	**str;
+	int		i;
 
+	i = 0;
+	while (minishell->read[i] && (minishell->read[i] == ' '
+			|| (minishell->read[i] >= 9 && minishell->read[i] <= 13)))
+		i++;
+	if (minishell->read[i] == 0)
+		return ;
 	global_counter(minishell, minishell->read);
 	minishell->str = makeline(minishell->read, minishell);
 	if (handling_status(checkglobal(minishell->str)))
@@ -47,8 +54,7 @@ void	minishell_program(t_minishell *minishell, t_env **env_lst)
 			exit(get_exitst(0, false));
 		}
 		add_history(minishell->read);
-		if (countword(minishell->read, ' ') > 0)
-			excuteprogram(minishell, env_lst);
+		excuteprogram(minishell, env_lst);
 		free(minishell->read);
 		free(prompt);
 		if (minishell->is_exit)

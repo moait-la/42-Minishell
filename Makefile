@@ -42,7 +42,7 @@ RESET = \033[0m
 
 FILE = main.c $(BUILTINS) $(EXECUTION) $(PROTACTION) $(EXPANDING) $(LIB) $(UTILS)
 
-CC = cc  -Wall -Wextra -Werror
+CC = cc -Wall -Wextra -Werror
 LIBC = ar rc
 
 OBJECTFILES = $(FILE:.c=.o)

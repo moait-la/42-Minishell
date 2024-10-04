@@ -6,7 +6,7 @@
 /*   By: mochenna <mochenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:52:27 by mochenna          #+#    #+#             */
-/*   Updated: 2024/09/24 21:23:49 by mochenna         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:10:42 by mochenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ long	ft_atol(char *str, int *is)
 	i = 0;
 	s = 1;
 	r = 0;
+	*is = 0;
 	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -28,8 +29,8 @@ long	ft_atol(char *str, int *is)
 			s = -1;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if ((r > LONG_MAX / 10)
-			|| (r == LONG_MAX / 10 && (str[i] - '0') > LONG_MAX % 10))
+		if ((r > LONG_MAX / 10) || (r == LONG_MAX / 10
+				&& (str[i] - '0') > LONG_MAX % 10))
 			return ((*is = 1));
 		r = r * 10 + (str[i] - '0');
 		i++;
@@ -50,62 +51,61 @@ bool	ft_not_digit(char *s, char *s1)
 		i++;
 	while (s[i])
 	{
-		if (!(s[i] >= '0' && s[i] <= '9')
-			&& s[i] != ' ' && !(s[i] >= '\t' && s[i] <= '\r'))
+		if (!(s[i] >= '0' && s[i] <= '9') && s[i] != ' '
+			&& !(s[i] >= '\t' && s[i] <= '\r'))
 			return (true);
 		i++;
 	}
 	return (false);
 }
 
-void	put_value(t_minishell *m, int flag, int value, bool f_exit)
+void	handling_status_exit(t_exit *e, t_minishell *m)
 {
-	if (flag == 1)
-		printerror("minishel: exit: : numeric argument required \n");
-	else
-		printerror("minishell: exit: too many arguments\n");
-	if (!f_exit)
-		m->is_exit = false;
-	m->exit_value = value;
-}
-
-bool	handling_exit(t_minishell *m, long n, int is_overflow)
-{
-	if (is_overflow == 1)
+	if ((e->status % 2 == 0 || e->status == 0
+			|| e->status == 1337) && e->status != 1)
 	{
-		printerror("minishel: exit: : numeric argument required \n");
-		m->exit_value = get_exitst(255, true);
-		return (true);
+		m->is_exit = true;
+		printf("exit\n");
+		if (e->status == 0 && !e->in_pip)
+			m->exit_value = get_exitst(0, true);
+		else if ((e->status == 0 && e->in_pip) || e->status == 4)
+			m->is_exit = false;
+		if (e->status == 2 || e->is_overflow == 1)
+		{
+			printf("minishel: exit: numeric argument required \n");
+			m->exit_value = get_exitst(255, true);
+		}
+		else if (e->status == 4)
+		{
+			printf("minishell: exit: too many arguments\n");
+			m->exit_value = get_exitst(1, true);
+		}
+		else if (e->status == 1337)
+			m->exit_value = get_exitst(e->n, true);
 	}
-	m->exit_value = (int)(n & 255);
-	return (false);
+	else
+		exit_utils(e->status, e->is_overflow, e->n);
 }
 
 void	ft_exit(t_minishell *m, t_cmd *cmd)
 {
-	long	n;
+	t_exit	exit;
 
-	if (m->allpip != 0)
-		return ;
-	printerror("exit\n");
-	m->is_exit = true;
+	exit.status = 0;
+	exit.in_pip = false;
+	if (cmd->id_pipline > 0 || m->allpip != 0)
+		exit.in_pip = true;
 	if (!cmd->allcmd[1])
-	{
-		m->exit_value = get_exitst(0, false);
-		return ;
-	}
-	if (ft_not_digit(cmd->command[1], cmd->allcmd[1]))
-	{
-		put_value(m, 1, get_exitst(255, true), true);
-		return ;
-	}
+		exit_utils_(exit.in_pip, &exit.status, 0, 1);
+	else if (ft_not_digit(cmd->command[1], cmd->allcmd[1]))
+		exit_utils_(exit.in_pip, &exit.status, 2, 3);
 	else if (cmd->command[2] != 0)
-	{
-		put_value(m, 2, get_exitst(1, true), false);
-		return ;
-	}
-	m->is_overflow = 0;
-	n = ft_atol(cmd->command[1], &m->is_overflow);
-	if (handling_exit(m, n, m->is_overflow))
-		return ;
+		exit_utils_(exit.in_pip, &exit.status, 4, 5);
+	else if (!exit.in_pip)
+		exit.status = 1337;
+	else
+		exit.status = -1337;
+	if (exit.status == 1337 || exit.status == -1337)
+		exit.n = ft_atol(cmd->command[1], &exit.is_overflow);
+	handling_status_exit(&exit, m);
 }

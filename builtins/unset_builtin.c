@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 22:19:25 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/14 16:36:52 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:57:05 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_unset_env(t_cmd *cmd, t_env **env_lst)
 	i = 0;
 	while (cmd->command[++i])
 	{
-		if (is_valid_identifier(cmd->command[i]))
+		if (is_valid_identifier(cmd->command[i], 1))
 		{
 			get_exitst(1, true);
 			ft_putstr_fd("not a valid identifier\n", 2);

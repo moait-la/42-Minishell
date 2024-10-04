@@ -6,7 +6,7 @@
 /*   By: moait-la <moait-la@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:19:56 by moait-la          #+#    #+#             */
-/*   Updated: 2024/09/24 03:08:41 by moait-la         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:58:23 by moait-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_handle_point(t_cmd *cmd)
 	return (free(current_pwd), ft_strdup(cmd->command[1]));
 }
 
-int	is_valid_identifier(char *command)
+int	is_valid_identifier(char *command, int mybool)
 {
 	int	j;
 
@@ -63,8 +63,10 @@ int	is_valid_identifier(char *command)
 		return (1);
 	while (command[++j])
 	{
-		if (command[j] == '=')
+		if (command[j] == '=' && mybool == 0)
 			return (0);
+		else if (command[j] == '=' && mybool == 1)
+			return (1);
 		if (!ft_isalnum(command[j]) && command[j] != '_' && command[j] != '+')
 			return (1);
 		if (command[j] == '+' && command[j + 1] == '=')
